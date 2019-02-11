@@ -4,6 +4,7 @@ const passport = require('passport');
 const JwtStrategy = require('passport-jwt').Strategy;
 const { ExtractJwt } = require('passport-jwt');
 const LocalStrategy = require('passport-local').Strategy;
+const GooglePlusTokenStrategy = require('passport-google-plus-token');
 const User = require('../models/User');
 
 passport.use(new JwtStrategy({
@@ -22,15 +23,45 @@ passport.use(new JwtStrategy({
   });
 }));
 
+passport.use('googleToken', new GooglePlusTokenStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET
+}, (accessToken, refreshToken, profile, done) => {
+  console.log('profile:', profile);
+  User.findOne({ 'google.id': profile.id }, (err, userRecord) => {
+    if (err) {
+      return done(err, false, err.message);
+    }
+    if (userRecord) {
+      return done(null, userRecord);
+    }
+    const newUser = new User({
+      authMethod: 'google',
+      google: {
+        id: profile.id,
+        username: profile.displayName,
+        email: profile.emails.length ? profile.emails[0].value : ''
+      }
+    });
+    User.createUser(newUser, (err, user) => {
+      if (err) {
+        done(err, false, err.message);
+      } else {
+        done(null, user);
+      }
+    });
+  });
+}));
+
 passport.use(new LocalStrategy({
   usernameField: 'email'
 }, (email, password, done) => {
-  User.findOne({ email }, (err, user) => {
+  User.findOne({ 'local.email': email }, (err, user) => {
     if (err) {
       return done(err, false);
     }
     if (user) {
-      User.isValidPassword(password, user.password, (err, isMatch) => {
+      User.isValidPassword(password, user.local.password, (err, isMatch) => {
         if (err) {
           throw new Error(err);
         }

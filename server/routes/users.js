@@ -20,13 +20,20 @@ const signJWTToken = (user) => {
 router.post('/register', validateBody(schemas.registrationSchema), (req, res) => {
   const { username, password, email } = req.value.body;
 
-  User.findOne({ email }).then(userRecord => {
+  User.findOne({ 'local.email': email }).then(userRecord => {
     if (userRecord) {
       return res.status(403).json({
         error: 'Email is already in use'
       });
     } else {
-      const newUser = new User({ username, password, email });
+      const newUser = new User({
+        authMethod: 'local',
+        local: {
+          username,
+          password,
+          email
+        }
+      });
 
       User.createUser(newUser, (err, user) => {
         if (err) {
@@ -45,8 +52,13 @@ router.post('/login', validateBody(schemas.authenticationSchema), passport.authe
   res.status(200).json({ token });
 });
 
+router.post('/auth/google', passport.authenticate('googleToken', { session: false }), (req, res) => {
+  const token = signJWTToken(req.user);
+  res.status(200).json({ token });
+});
+
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
-  if (req.user.isAdmin) {
+  if (req.user.local.isAdmin) {
     User.find({}, (err, users) => {
       if (err) {
         res.status(400).json({
@@ -63,8 +75,20 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
   }
 });
 
+router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
+  User.findById(req.user.id, (err, user) => {
+    if (err) {
+      res.status(400).json({
+        error: err.message
+      });
+    } else {
+      res.status(200).json(user);
+    }
+  });
+});
+
 router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-  if (req.user.isAdmin) {
+  if (req.user.local.isAdmin) {
     User.findByIdAndRemove(req.params.id, (err, user) => {
       if (err) {
         res.status(400).json({

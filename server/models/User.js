@@ -2,33 +2,59 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const UserSchema = mongoose.Schema({
-  username: {
+  authMethod: {
     type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
+    enum: ['local', 'google', 'facebook'],
     required: true
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true
+  local: {
+    username: {
+      type: String,
+    },
+    password: {
+      type: String,
+    },
+    email: {
+      type: String,
+      lowercase: true
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false
+    }
   },
-  isAdmin: {
-    type: Boolean,
-    default: false
+  google: {
+    id: {
+      type: String
+    },
+    username: {
+      type: String,
+    },
+    email: {
+      type: String,
+      lowercase: true
+    }
+  },
+  facebook: {
+    id: {
+      type: String
+    },
+    email: {
+      type: String,
+      lowercase: true
+    }
   }
 });
 
 const User = module.exports = mongoose.model('user', UserSchema);
 
 module.exports.createUser = (newUser, callback) => {
+  if (newUser.authMethod !== 'local') {
+    return newUser.save(callback);
+  }
   bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(newUser.password, salt, (err, hash) => {
-      newUser.password = hash;
+    bcrypt.hash(newUser.local.password, salt, (err, hash) => {
+      newUser.local.password = hash;
       newUser.save(callback);
     });
   });
