@@ -5,6 +5,7 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const { ExtractJwt } = require('passport-jwt');
 const LocalStrategy = require('passport-local').Strategy;
 const GooglePlusTokenStrategy = require('passport-google-plus-token');
+const FacebookTokenStrategy = require('passport-facebook-token');
 const User = require('../models/User');
 
 passport.use(new JwtStrategy({
@@ -27,7 +28,6 @@ passport.use('googleToken', new GooglePlusTokenStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET
 }, (accessToken, refreshToken, profile, done) => {
-  console.log('profile:', profile);
   User.findOne({ 'google.id': profile.id }, (err, userRecord) => {
     if (err) {
       return done(err, false, err.message);
@@ -40,7 +40,38 @@ passport.use('googleToken', new GooglePlusTokenStrategy({
       google: {
         id: profile.id,
         username: profile.displayName,
-        email: profile.emails.length ? profile.emails[0].value : ''
+        email: profile.emails.length ? profile.emails[0].value : '',
+        avatar: profile.photos.length ? profile.photos[0].value : ''
+      }
+    });
+    User.createUser(newUser, (err, user) => {
+      if (err) {
+        done(err, false, err.message);
+      } else {
+        done(null, user);
+      }
+    });
+  });
+}));
+
+passport.use('facebookToken', new FacebookTokenStrategy({
+  clientID: process.env.FACEBOOK_CLIENT_ID,
+  clientSecret: process.env.FACEBOOK_CLIENT_SECRET
+}, (accessToken, refreshToken, profile, done) => {
+  User.findOne({ 'facebook.id': profile.id }, (err, userRecord) => {
+    if (err) {
+      return done(err, false, err.message);
+    }
+    if (userRecord) {
+      return done(null, userRecord);
+    }
+    const newUser = new User({
+      authMethod: 'facebook',
+      facebook: {
+        id: profile.id,
+        username: profile.displayName,
+        email: profile.emails.length ? profile.emails[0].value : '',
+        avatar: profile.photos.length ? profile.photos[0].value : ''
       }
     });
     User.createUser(newUser, (err, user) => {

@@ -23,12 +23,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 
 // Routes
-const ngosRoutes = require('./routes/api/ngos');
-const causesRoutes = require('./routes/api/causes');
+const ngosRoutes = require('./routes/ngos');
+const causesRoutes = require('./routes/causes');
 const usersRoutes = require('./routes/users');
+const commentsRoutes = require('./routes/comments');
 
-app.use('/api/ngos', ngosRoutes);
-app.use('/api/causes', causesRoutes);
+app.use('/ngos', ngosRoutes);
+app.use('/causes', causesRoutes);
 app.use('/users', usersRoutes);
+app.use('/comments', commentsRoutes);
 
 module.exports = app;

@@ -18,9 +18,8 @@ const UserSchema = mongoose.Schema({
       type: String,
       lowercase: true
     },
-    isAdmin: {
-      type: Boolean,
-      default: false
+    avatar: {
+      type: String
     }
   },
   google: {
@@ -33,16 +32,29 @@ const UserSchema = mongoose.Schema({
     email: {
       type: String,
       lowercase: true
+    },
+    avatar: {
+      type: String
     }
   },
   facebook: {
     id: {
       type: String
     },
+    username: {
+      type: String,
+    },
     email: {
       type: String,
       lowercase: true
+    },
+    avatar: {
+      type: String
     }
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false
   }
 });
 

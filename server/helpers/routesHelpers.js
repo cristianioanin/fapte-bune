@@ -1,3 +1,6 @@
+require('dotenv').config();
+
+const JWT = require('jsonwebtoken');
 const Joi = require('joi');
 
 module.exports = {
@@ -19,6 +22,7 @@ module.exports = {
     registrationSchema: Joi.object().keys({
       email: Joi.string().email().required(),
       username: Joi.string().required(),
+      avatar: Joi.string(),
       password: Joi.string().required(),
       passwordConfirm: Joi.string().valid(Joi.ref('password')).required().options({ language: { any: { allowOnly: 'must match password' } } })
     }),
@@ -26,5 +30,14 @@ module.exports = {
       email: Joi.string().email().required(),
       password: Joi.string().required()
     })
+  },
+
+  signJWTToken: (user) => {
+    return JWT.sign({
+      iss: 'fapte-bune',
+      sub: user.id,
+      iat: new Date().getTime(),
+      exp: new Date().setDate(new Date().getDate() + 1)
+    }, process.env.JWT_SECRET);
   }
 }
