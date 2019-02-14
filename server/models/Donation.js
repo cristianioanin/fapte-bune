@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
-const CommentSchema = mongoose.Schema({
-  text: String,
+const DonationSchema = mongoose.Schema({
+  amount: Number,
   created: {
     type: Date,
     default: Date.now
   },
-  author: {
+  issuedBy: {
     id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'user'
@@ -15,4 +15,4 @@ const CommentSchema = mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('comment', CommentSchema);
+module.exports = mongoose.model('donation', DonationSchema);

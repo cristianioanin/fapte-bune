@@ -27,10 +27,20 @@ const ngosRoutes = require('./routes/ngos');
 const causesRoutes = require('./routes/causes');
 const usersRoutes = require('./routes/users');
 const commentsRoutes = require('./routes/comments');
+const commentsNGORoutes = require('./routes/comments-ngos');
+const commentsCauseRoutes = require('./routes/comments-causes');
+const donationsRoutes = require('./routes/donations');
+const donationsNGORoutes = require('./routes/donations-ngos');
+const donationsCauseRoutes = require('./routes/donations-causes');
 
 app.use('/ngos', ngosRoutes);
 app.use('/causes', causesRoutes);
 app.use('/users', usersRoutes);
 app.use('/comments', commentsRoutes);
+app.use('/donations', donationsRoutes);
+app.use('/ngos/:id/comments', commentsNGORoutes);
+app.use('/causes/:id/comments', commentsCauseRoutes);
+app.use('/ngos/:id/donations', donationsNGORoutes);
+app.use('/causes/:id/donations', donationsCauseRoutes);
 
 module.exports = app;
