@@ -1,13 +1,19 @@
 require('../config/passport-setup');
 
 const express = require('express');
-const router = express.Router({ mergeParams: true });
+const router = express.Router({
+  mergeParams: true
+});
 const passport = require('passport');
 const Donation = require('../models/Donation');
-const { allowIfAdmin } = require('../helpers/routesHelpers');
+const {
+  allowIfAdmin
+} = require('../helpers/routesHelpers');
 
 // INDEX Route
-router.get('/', passport.authenticate('jwt', { session: false }), allowIfAdmin, (req, res) => {
+router.get('/', passport.authenticate('jwt', {
+  session: false
+}), allowIfAdmin, (req, res) => {
   Donation.find({}, (err, donations) => {
     if (err) {
       res.status(400).json(err);
@@ -18,7 +24,9 @@ router.get('/', passport.authenticate('jwt', { session: false }), allowIfAdmin, 
 });
 
 // SHOW Route
-router.get('/:id', passport.authenticate('jwt', { session: false }), allowIfAdmin, (req, res) => {
+router.get('/:id', passport.authenticate('jwt', {
+  session: false
+}), allowIfAdmin, (req, res) => {
   Donation.findById(req.params.id, (err, donation) => {
     if (err) {
       res.status(400).json(err);
@@ -29,9 +37,10 @@ router.get('/:id', passport.authenticate('jwt', { session: false }), allowIfAdmi
 });
 
 // UPDATE Route
-router.put('/:id', passport.authenticate('jwt', { session: false }), allowIfAdmin, (req, res) => {
+router.put('/:id', passport.authenticate('jwt', {
+  session: false
+}), allowIfAdmin, (req, res) => {
   Donation.findByIdAndUpdate(req.params.id, req.body.donation, (err, oldDonation) => {
-    console.log('donation', req.body);
     if (err) {
       res.status(400).json(err);
     } else {
@@ -41,7 +50,9 @@ router.put('/:id', passport.authenticate('jwt', { session: false }), allowIfAdmi
 });
 
 // DELETE Route
-router.delete('/:id', passport.authenticate('jwt', { session: false }), allowIfAdmin, (req, res) => {
+router.delete('/:id', passport.authenticate('jwt', {
+  session: false
+}), allowIfAdmin, (req, res) => {
   Donation.findByIdAndRemove(req.params.id, (err, donation) => {
     if (err) {
       res.status(400).json(err);

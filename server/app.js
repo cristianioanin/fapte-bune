@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
@@ -10,14 +11,19 @@ const mongoose = require('mongoose');
 const app = express();
 
 // Initialize DataBase Connection
-mongoose.connect(process.env.DB_URI, { useNewUrlParser: true }, () => {
+mongoose.connect(process.env.DB_URI, {
+  useNewUrlParser: true
+}, () => {
   console.log('Connected to MongoDB');
 });
 const db = mongoose.connection;
 
 // BodyParser Middleware
+app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
 // Init Passport
 app.use(passport.initialize());

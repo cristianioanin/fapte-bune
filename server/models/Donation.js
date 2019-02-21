@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const DonationSchema = mongoose.Schema({
   amount: Number,
+  currency: {
+    type: String,
+    enum: ['RON', 'EUR', 'USD']
+  },
   created: {
     type: Date,
     default: Date.now

@@ -27,7 +27,13 @@ module.exports = {
       username: Joi.string().required(),
       avatar: Joi.string(),
       password: Joi.string().required(),
-      passwordConfirm: Joi.string().valid(Joi.ref('password')).required().options({ language: { any: { allowOnly: 'must match password' } } })
+      passwordConfirm: Joi.string().valid(Joi.ref('password')).required().options({
+        language: {
+          any: {
+            allowOnly: 'must match password'
+          }
+        }
+      })
     }),
     authenticationSchema: Joi.object().keys({
       email: Joi.string().email().required(),
@@ -40,7 +46,7 @@ module.exports = {
       iss: 'fapte-bune',
       sub: user.id,
       iat: new Date().getTime(),
-      exp: new Date().setDate(new Date().getDate() + 1)
+      exp: Math.floor(Date.now() / 1000) + (60 * 60)
     }, process.env.JWT_SECRET);
   },
 
