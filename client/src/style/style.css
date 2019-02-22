@@ -1,0 +1,24 @@
+.navbar-logo {
+    max-width: 50%;
+}
+
+.nav-item {
+    padding: 5px;
+}
+
+.card-container {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.card {
+    height: 100%;
+}
+
+.card .card-body{
+    position: absolute;
+    bottom: 0;
+    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,rgba(41,53,65,0)),color-stop(50%,rgba(41,53,65,.8)),color-stop(100%,#293541));
+    width: 100%;
+    color: white;
+}
