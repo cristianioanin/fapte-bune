@@ -6,19 +6,64 @@
     padding: 5px;
 }
 
-.card-container {
-    padding-left: 0;
-    padding-right: 0;
-}
-
 .card {
     height: 100%;
 }
 
-.card .card-body{
+.card .card-body {
     position: absolute;
     bottom: 0;
-    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,rgba(41,53,65,0)),color-stop(50%,rgba(41,53,65,.8)),color-stop(100%,#293541));
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(41, 53, 65, 0)), color-stop(50%, rgba(41, 53, 65, .8)), color-stop(100%, #293541));
     width: 100%;
     color: white;
+
+}
+
+.case-bar {
+    background-color: #e7e5e1;
+    margin-top: 1px;
+}
+
+.case-bar .col {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    text-align: center;
+    font-size: .9rem;
+    letter-spacing: .01rem;
+}
+
+.case-bar .case-type {
+    color: #3e3c39;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+
+.case-bar .case-type.is-selected:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    border-left: .5rem solid transparent;
+    border-right: .5rem solid transparent;
+    border-top: .5rem solid #ffffff;
+}
+
+.case-bar .case-bar-description {
+    text-transform: uppercase;
+    color: #5b564c;
+}
+
+#map {
+    margin-top: 57px;
+    height: 400px;
+    width: 100%;
+}
+
+.donation-info {
+    text-align: center;
+    justify-content: center;
+    padding: 1rem;
+    margin-top: 60px;
+    margin-bottom: 60px;
 }

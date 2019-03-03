@@ -29,10 +29,10 @@ router.get('/', (req, res) => {
 
 // CREATE Route
 router.post('/', passport.authenticate('jwt', { session: false }), allowIfAdmin, (req, res) => {
-  const { name, description, location, needsToRaise } = req.body;
+  const { name, description, image, type, location, needsToRaise } = req.body;
   const author = {
     id: req.user._id
-  }
+  };
   geocoder.geocode(location, (err, data) => {
     if (err || !data.length) {
       return res.status(400).json({
@@ -43,7 +43,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), allowIfAdmin,
     const lat = data[0].latitude;
     const lng = data[0].longitude;
     const location = data[0].formattedAddress;
-    const newCause = { name, location, needsToRaise, lat, lng, description, author };
+    const newCause = { name, type, image, location, needsToRaise, lat, lng, description, author };
 
     Cause.create(newCause, (err, causeRecord) => {
       if (err) {
@@ -71,7 +71,7 @@ router.get('/:id', (req, res) => {
 // UPDATE Route
 router.put('/:id', passport.authenticate('jwt', { session: false }), allowCauseEditing, (req, res) => {
 
-  const { name, description, location, needsToRaise } = req.body;
+  const { name, description, image, type, location, needsToRaise } = req.body;
 
   geocoder.geocode(location, (err, data) => {
     if (err || !data.length) {
@@ -83,7 +83,7 @@ router.put('/:id', passport.authenticate('jwt', { session: false }), allowCauseE
     const lat = data[0].latitude;
     const lng = data[0].longitude;
     const location = data[0].formattedAddress;
-    const newCauseData = { name, location, lat, lng, description, needsToRaise };
+    const newCauseData = { name, type, location, image, lat, lng, description, needsToRaise };
 
     Cause.findByIdAndUpdate(req.params.id, newCauseData, (err, oldRecord) => {
       if (err) {

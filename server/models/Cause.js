@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const CauseSchema = new mongoose.Schema({
   name: String,
   description: String,
+  image: String,
   location: String,
+  type: String,
   lat: Number,
   lng: Number,
   created: {
