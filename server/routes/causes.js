@@ -18,7 +18,9 @@ const geocoder = NodeGeocoder(options);
 
 // INDEX Route
 router.get('/', (req, res) => {
-  Cause.find({}, (err, causes) => {
+  const type = req.query.type;
+  const options = type ? {type} : {};
+  Cause.find(options, null, { limit: parseInt(req.query.limit) }, (err, causes) => {
     if (err) {
       res.status(400).json(err);
     } else {
@@ -69,32 +71,46 @@ router.get('/:id', (req, res) => {
 });
 
 // UPDATE Route
-router.put('/:id', passport.authenticate('jwt', { session: false }), allowCauseEditing, (req, res) => {
+router.put('/:id', (req, res) => {
 
-  const { name, description, image, type, location, needsToRaise } = req.body;
+  const { name, description, image, type, location, needsToRaise, amountRaised } = req.body;
 
-  geocoder.geocode(location, (err, data) => {
-    if (err || !data.length) {
-      return res.status(400).json({
-        error: 'Provided address could not be matched through Geocoding API'
+  if (location) {
+      geocoder.geocode(location, (err, data) => {
+          if (err || !data.length) {
+              return res.status(400).json({
+                  error: 'Provided address could not be matched through Geocoding API'
+              });
+          }
+
+          const lat = data[0].latitude;
+          const lng = data[0].longitude;
+          const location = data[0].formattedAddress;
+          const newCauseData = {name, type, location, image, lat, lng, description, needsToRaise, amountRaised};
+
+          Cause.findByIdAndUpdate(req.params.id, newCauseData, (err, oldRecord) => {
+              if (err) {
+                  res.status(400).json({
+                      error: err
+                  });
+              } else {
+                  res.status(202).json(oldRecord);
+              }
+          });
       });
-    }
+  } else {
+      const newCauseData = {amountRaised};
 
-    const lat = data[0].latitude;
-    const lng = data[0].longitude;
-    const location = data[0].formattedAddress;
-    const newCauseData = { name, type, location, image, lat, lng, description, needsToRaise };
-
-    Cause.findByIdAndUpdate(req.params.id, newCauseData, (err, oldRecord) => {
-      if (err) {
-        res.status(400).json({
-          error: err
-        });
-      } else {
-        res.status(202).json(oldRecord);
-      }
-    });
-  });
+      Cause.findByIdAndUpdate(req.params.id, newCauseData, (err, data) => {
+          if (err) {
+              res.status(400).json({
+                  error: err
+              });
+          } else {
+              res.status(202).json(data);
+          }
+      });
+  }
 });
 
 // DESTROY Route

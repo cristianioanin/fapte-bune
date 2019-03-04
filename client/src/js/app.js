@@ -7,20 +7,25 @@ fb.MainApplication.prototype = {
         this.attachListeners();
         this.initMap();
         this.getNGOs();
-        this.getCauses();
+        this.getCauses({limit: 5});
     },
 
     attachListeners: function () {
-        $('.card').on('mouseover', function (e) {
-            $(e.currentTarget).find('.invisible').removeClass('invisible').addClass('visible');
+        $('.cases-container').on('mouseover', '.card', function (e) {
+            $(e.currentTarget).find('.d-none').removeClass('d-none').addClass('visible');
         });
-        $('.card').on('mouseout', function (e) {
-            $(e.currentTarget).find('.visible').removeClass('visible').addClass('invisible');
+        $('.cases-container').on('mouseout', '.card', function (e) {
+            $(e.currentTarget).find('.visible').removeClass('visible').addClass('d-none');
         });
-        $('.case-type').on('click', function (e) {
-            $(e.currentTarget).siblings().removeClass('is-selected');
-            $(e.currentTarget).removeClass('is-selected').addClass('is-selected');
-        });
+        $('.case-type').on('click', $.proxy(function (e) {
+            const currentTarget = $(e.currentTarget);
+            const type = currentTarget.data('type');
+            currentTarget.siblings().removeClass('is-selected');
+            currentTarget.removeClass('is-selected').addClass('is-selected');
+            this.getCauses({limit: 5, type});
+        }, this));
+
+        $('.cases-container').on('click', '.btn-donate', $.proxy(this.onDonateClick, this));
     },
     getNGOs: function () {
         $.ajax({
@@ -31,12 +36,12 @@ fb.MainApplication.prototype = {
             success: $.proxy(this.loadNGOs, this)
         });
     },
-    getCauses: function () {
+    getCauses: function ({limit = null, type = null}) {
         $.ajax({
             method: 'GET',
             contentType: 'application/json',
             dataType: 'json',
-            url: `${fb.API}/causes`,
+            url: `${fb.API}/causes?${limit ? `limit=${limit}` : ''}${type ? `&type=${type}` : ''}`,
             success: $.proxy(this.loadCauses, this)
         });
     },
@@ -47,193 +52,7 @@ fb.MainApplication.prototype = {
         // for display.
         this.map = new google.maps.Map(document.getElementById('map'), {
             center: myLatLng,
-            zoom: 6,
-            styles: [
-                {
-                    "elementType": "geometry",
-                    "stylers": [
-                        {
-                            "color": "#212121"
-                        }
-                    ]
-                },
-                {
-                    "elementType": "labels.icon",
-                    "stylers": [
-                        {
-                            "visibility": "off"
-                        }
-                    ]
-                },
-                {
-                    "elementType": "labels.text.fill",
-                    "stylers": [
-                        {
-                            "color": "#757575"
-                        }
-                    ]
-                },
-                {
-                    "elementType": "labels.text.stroke",
-                    "stylers": [
-                        {
-                            "color": "#212121"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "administrative",
-                    "elementType": "geometry",
-                    "stylers": [
-                        {
-                            "color": "#757575"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "administrative.country",
-                    "elementType": "labels.text.fill",
-                    "stylers": [
-                        {
-                            "color": "#9e9e9e"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "administrative.land_parcel",
-                    "stylers": [
-                        {
-                            "visibility": "off"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "administrative.locality",
-                    "elementType": "labels.text.fill",
-                    "stylers": [
-                        {
-                            "color": "#bdbdbd"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "poi",
-                    "elementType": "labels.text.fill",
-                    "stylers": [
-                        {
-                            "color": "#757575"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "poi.park",
-                    "elementType": "geometry",
-                    "stylers": [
-                        {
-                            "color": "#181818"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "poi.park",
-                    "elementType": "labels.text.fill",
-                    "stylers": [
-                        {
-                            "color": "#616161"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "poi.park",
-                    "elementType": "labels.text.stroke",
-                    "stylers": [
-                        {
-                            "color": "#1b1b1b"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road",
-                    "elementType": "geometry.fill",
-                    "stylers": [
-                        {
-                            "color": "#2c2c2c"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road",
-                    "elementType": "labels.text.fill",
-                    "stylers": [
-                        {
-                            "color": "#8a8a8a"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road.arterial",
-                    "elementType": "geometry",
-                    "stylers": [
-                        {
-                            "color": "#373737"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road.highway",
-                    "elementType": "geometry",
-                    "stylers": [
-                        {
-                            "color": "#3c3c3c"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road.highway.controlled_access",
-                    "elementType": "geometry",
-                    "stylers": [
-                        {
-                            "color": "#4e4e4e"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road.local",
-                    "elementType": "labels.text.fill",
-                    "stylers": [
-                        {
-                            "color": "#616161"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "transit",
-                    "elementType": "labels.text.fill",
-                    "stylers": [
-                        {
-                            "color": "#757575"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "water",
-                    "elementType": "geometry",
-                    "stylers": [
-                        {
-                            "color": "#000000"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "water",
-                    "elementType": "labels.text.fill",
-                    "stylers": [
-                        {
-                            "color": "#3d3d3d"
-                        }
-                    ]
-                }
-            ]
+            zoom: 6
 
         });
     },
@@ -244,7 +63,7 @@ fb.MainApplication.prototype = {
                 position: {lat: ngo.lat, lng: ngo.lng},
                 title: ngo.name,
                 icon: {
-                    url: "src/style/img/donate-icon-png.jpg",
+                    url: "src/style/images/donate-icon-png.jpg",
                     scaledSize: new google.maps.Size(32, 32)
                 }
             });
@@ -259,7 +78,62 @@ fb.MainApplication.prototype = {
         });
     },
     loadCauses: function (causes) {
-        console.log(causes);
+        const row = $('<div class="row no-gutters">');
+        const mainCardContainer = $('<div class="col col-6 card-container main-card-container"></div>');
+        const secondaryCardsContainer = $('<div class="col col-6 card-container secondary-cards-container"></div>');
+        const secondaryRow = $('<div class="row no-gutters h-100">');
+        causes.map((cause, index) => {
+            const card = $('<div class="card" data-id=' + cause._id + ' data-raised=' + cause.amountRaised + ' data-remaining=' + cause.needsToRaise + '>' +
+                '<img class="card-img-top" src=' + cause.image + ' alt="Card">' +
+                '<div class="card-body">' +
+                '<h5 class="card-title">' + cause.name + '</h5>' +
+                '<p class="card-text">' + cause.description + '</p>' +
+                '<a href="#" class="btn btn-primary d-none btn-donate">Donate</a>' +
+                '</div>' +
+                '</div>');
+
+            if (index === 0) {
+                card.addClass('h-100');
+                mainCardContainer.append(card);
+            } else {
+                card.addClass('col col-6');
+                secondaryRow.append(card);
+            }
+        });
+        secondaryCardsContainer.append(secondaryRow);
+        row.append(mainCardContainer);
+        row.append(secondaryCardsContainer);
+        if (causes.length) {
+            $('.cases-container').empty().append(row);
+        } else {
+            $('.cases-container').empty().append('<div class="alert alert-danger" role="alert">Momentan nu sunt cazuri active in aceasta categorie.</div>');
+        }
+    },
+    onDonateClick: function (e) {
+        const currentTarget = $(e.currentTarget);
+        const parent = currentTarget.closest('.card');
+        const causeId = parent.data('id');
+        const amountRaised = parent.data('raised');
+        const needsToRaise = parent.data('remaining');
+        if (!$('#modal').length) {
+            $('body').append('<div id="modal"></div>');
+        } else {
+            $('#modal').empty();
+        }
+        const window = $('#modal').kendoWindow({
+            width: '700px',
+            modal: true,
+            height: '500px',
+            visible: false,
+            actions: [
+                "Close"
+            ],
+            content: 'src/templates/DonateWindow.html',
+            refresh: function (response) {
+                const donate = new fb.windows.DonateWindow({causeId, amountRaised, needsToRaise});
+            }
+        }).data('kendoWindow');
+        window.center().open();
     }
 
 };

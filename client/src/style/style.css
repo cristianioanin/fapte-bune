@@ -6,10 +6,6 @@
     padding: 5px;
 }
 
-.card {
-    height: 100%;
-}
-
 .card .card-body {
     position: absolute;
     bottom: 0;
@@ -66,4 +62,26 @@
     padding: 1rem;
     margin-top: 60px;
     margin-bottom: 60px;
+}
+
+.donate-window-inputs-container {
+    background: #f8f9fa;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.exact-amount {
+    padding: .5rem;
+    border: 1px solid lightgray;
+    background: white;
+    cursor: pointer;
+}
+
+.exact-amount.is-selected {
+    background-color: lightgray;
+    color: white;
+}
+
+.progress {
+    width: calc(90% - 1.5rem);
 }
