@@ -27,9 +27,6 @@ router.route('/dashboard', function () {
 });
 
 router.route('/ngos', () => NGO.getAllRecords());
-router.route('/ngos/:id/edit', () => {
-  // NGO.getRecordById();
-});
 router.route('/causes', () => Cause.getAllRecords());
 router.route('/donations', () => Donation.getAllRecords());
 router.route('/users', () => User.getAllRecords());

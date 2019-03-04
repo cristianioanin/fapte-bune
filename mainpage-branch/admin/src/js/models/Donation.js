@@ -4,7 +4,6 @@ import DonationsView from '../views/donationsView.js';
 
 export default class Donation {
   constructor(donationRecord) {
-    this.id = donationRecord._id;
     this.amount = donationRecord.amount;
     this.currency = donationRecord.currency;
     this.created = new Date(donationRecord.created).toLocaleDateString();

@@ -65,6 +65,18 @@ export default class DashboardView {
         </div>
       </aside>
       <section id="main-content">
+        <h1>Main Content on the page</h1>
+        <article id="main-details">
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda a eligendi inventore corporis, laborum
+            qui? Id, expedita molestias, vel totam fugiat quam magni natus reiciendis quisquam asperiores eveniet!
+            Nesciunt, optio!
+            Nisi in ratione, molestiae animi laborum placeat eaque est nostrum velit facere rerum cumque temporibus
+            ullam ipsa repudiandae aliquid explicabo? Impedit dolore iure nemo, earum voluptas nam libero perspiciatis
+            odio.
+            Sapiente necessitatibus rerum illum quis vero, amet similique laudantium sequi commodi quam ex quos qui
+            dolore sint optio facere inventore rem, libero ipsum tempore illo eum harum, at architecto? Dolorum.
+          </p>
+        </article>
       </section>
     </div>      
     `);
@@ -83,7 +95,6 @@ export default class DashboardView {
     $('#app-view').empty().append(mainView);
     // footer.insertAfter('#app-view');
 
-    router.navigate('/ngos');
     DashboardView.addEventListeners();
   }
 

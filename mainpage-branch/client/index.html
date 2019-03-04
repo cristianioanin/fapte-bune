@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fapte Bune - Invitatie la Altruism</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="src/style/kendo.common.min.css">
+    <link rel="stylesheet" href="src/style/kendo.default.min.css">
+    <link rel="stylesheet" href="src/style/kendo.default.mobile.min.css">
+    <link rel="stylesheet" href="src/style/style.css">
+
+</head>
+
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white row">
+        <a class="navbar-brand col-md-1" href="#">
+            <img class="navbar-logo" src="src/style/images/unicorn.png"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end mr-5" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Cases</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">NGOs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Details</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Login</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<div class="main-content">
+    <section class="cases">
+        <div class="cases-container"></div>
+        <div class="case-bar row">
+            <div class="col case-bar-description">Cazuri:</div>
+            <div class="col case-type is-selected">Noi</div>
+            <div class="col case-type" data-type="cancer">Cancer</div>
+            <div class="col case-type" data-type="copii">Copii</div>
+            <div class="col case-type" data-type="adulti">Adulti</div>
+        </div>
+    </section>
+    <section class="donation-info">
+        <span class="text-area">
+            Pe aceasta platforma puteti gasi detalii despre
+            <a href="" class="text_7n link_subtle col_defaultText">cazuri</a>
+            dificile si
+            <a href="" class="text_7n link_subtle col_defaultText">ONG-uri</a>
+            care nu raman indiferente in solutionarea lor
+        </span>
+    </section>
+    <section class="ngos-container">
+        <div id="map"></div>
+    </section>
+</div>
+
+<script src="src/js/jquery.min.js"></script>
+<script src="src/js/kendo.all.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIWLPh1ebiw1uwnyqDEZRNqHd5LwQGNY8"></script>
+<script src="src/js/fb.js"></script>
+<script src="src/js/app.js"></script>
+<script src="src/js/windows/DonateWindow.js"></script>
+
+</body>
+
+</html>

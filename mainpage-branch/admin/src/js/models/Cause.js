@@ -4,7 +4,6 @@ import CausesView from '../views/CausesView.js';
 
 export default class Cause {
   constructor(causeRecord) {
-    this.id = causeRecord._id;
     this.name = causeRecord.name;
     this.description = causeRecord.description;
     this.location = causeRecord.location;

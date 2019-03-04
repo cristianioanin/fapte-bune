@@ -4,7 +4,6 @@ import NGOsView from '../views/ngosView.js';
 
 export default class NGO {
   constructor(ngoRecord) {
-    this.id = ngoRecord._id;
     this.name = ngoRecord.name;
     this.logo = ngoRecord.logo;
     this.description = ngoRecord.description;
@@ -23,41 +22,8 @@ export default class NGO {
       url: `${API}/ngos`,
       method: 'GET'
     }).done((ngos) => {
-
       const ngosList = ngos.map(ngo => new NGO(ngo));
-      console.log(ngosList);
       NGOsView.renderListView(ngosList);
-    });
-  }
-
-  static getRecordById(id) {
-    $.ajax({
-      url: `${API}/ngos/${id}`,
-      method: 'GET'
-    }).done((ngo) => {
-      console.log(ngo);
-      NGOsView.renderEditView(ngo);
-    });
-  }
-
-  static editRecord(id, $form) {
-    const token = localStorage.getItem('faptebune_token');
-    const formInputs = $form.serializeArray();
-    const data = {
-      name: formInputs[0].value,
-      description: formInputs[1].value,
-      location: formInputs[2].value,
-      amountRaised: formInputs[3].value
-    };
-    $.ajax({
-      url: `${API}/ngos/${id}`,
-      method: 'PUT',
-      data,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader("Authorization", `${token}`);
-      }
-    }).done((ngo) => {
-      router.navigate('/ngos');
     });
   }
 }
